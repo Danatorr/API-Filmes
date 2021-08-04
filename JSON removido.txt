@@ -1,0 +1,10 @@
+14 e 15:
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+
+
+
+22 até 24:
+      "dotnetRunMessages": "true",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
