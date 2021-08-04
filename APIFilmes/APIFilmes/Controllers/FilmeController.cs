@@ -13,6 +13,7 @@ namespace APIFilmes.Controllers
     {
         public static List<Filme> filmes = new List<Filme>();
 
+        //O verbo "Post" sobe para o banco de dados
         [HttpPost]
         public void AdicionarFilme([FromBody] Filme filme)
         {
