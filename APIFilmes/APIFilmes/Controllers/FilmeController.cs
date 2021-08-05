@@ -16,21 +16,23 @@ namespace APIFilmes.Controllers
 
         //O verbo "Post" sobe para o banco de dados
         [HttpPost]
-        public void AdicionarFilme([FromBody] Filme filme)
+        public IActionResult AdicionarFilme([FromBody] Filme filme)
         {
             //Faz com que os filmes não tenham o mesmo Id
             filme.Id = id++;
 
             filmes.Add(filme);
-            Console.WriteLine(filme.Titulo);
+
+            //O primeiro parâmetro é a lógica de recuperar que deve ser usada, o segundo é a propriedade que deve ser herdada e o terceiro o objeto que está se referindo
+            return CreatedAtAction(nameof(RecuperaFilmesPorId), new {id = filme.Id}, filme);
         }
 
         //O ver "Get" desce do banco de dados
-        //Note que usamos IEnumerable<Filme> ao invés de uma lista de filmes, porque isso possibilita o uso desse método por outras classes que derivem dessa.
+        //Note que podemos usar IEnumerable<Filme> ao invés de uma lista de filmes ou IActionResult, porque isso possibilita o uso desse método por outras classes que derivem dessa.
         [HttpGet]
-        public IEnumerable<Filme> RecuperaFilmes()
+        public IActionResult RecuperaFilmes()
         {
-            return filmes;
+            return Ok(filmes);
         }
         /*
          * Isto v é a mesma coisa do que isso ^
@@ -41,9 +43,9 @@ namespace APIFilmes.Controllers
         }
         */
 
-        //Perceba que este HttpGet diferencia-se do outro pelo fato de pedir um parâmetro "id".
+        //Perceba que este HttpGet diferencia-se do outro pelo fato de pedir um parâmetro "id". Além disso, o IActionResult permite usar o Ok e o NotFound!
         [HttpGet("{id}")]
-        public Filme RecuperaFilmesPorId(int id)
+        public IActionResult RecuperaFilmesPorId(int id)
         {
             /*
             foreach (Filme filme in filmes)
@@ -57,7 +59,13 @@ namespace APIFilmes.Controllers
             */
 
             //Isto v é o mesmo que isso ^
-            return filmes.FirstOrDefault(filme => filme.Id == id);
+            Filme filme = filmes.FirstOrDefault(filme => filme.Id == id);
+
+            if (filme != null)
+            {
+                return Ok(filme);
+            }
+            return NotFound($"O filme com o id {id} não pode ser achado!");
         }
     }
 }
