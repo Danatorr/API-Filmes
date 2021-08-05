@@ -8,6 +8,10 @@ namespace APIFilmes.Models
 {
     public class Filme
     {
+        //O id é a melhor forma que temos de identificar diferentes objetos em uma lista
+        [Required]
+        public int Id { get; set; }
+
         //O required faz com que retorne um 400 (BadRequest) caso esteja vazio, e o ErrorMessage define a mensagem
         [Required(ErrorMessage = "Insira um título válido!")]
         [StringLength(50, ErrorMessage = "O título do filme não pode passar de 50 caracteres!")]
