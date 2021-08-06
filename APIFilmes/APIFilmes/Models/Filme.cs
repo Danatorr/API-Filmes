@@ -9,6 +9,7 @@ namespace APIFilmes.Models
     public class Filme
     {
         //O id é a melhor forma que temos de identificar diferentes objetos em uma lista
+        [Key]
         [Required]
         public int Id { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using APIFilmes.Models;
+﻿using APIFilmes.Data;
+using APIFilmes.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,18 +12,20 @@ namespace APIFilmes.Controllers
     [Route("[controller]")]
     public class FilmeController : ControllerBase
     {
-        private static List<Filme> filmes = new List<Filme>();
-        private static int id = 1;
+        private FilmeContext _context;
+
+        public FilmeController(FilmeContext context)
+        {
+            _context = context;
+        }
+
 
         //O verbo "Post" sobe para o banco de dados
         [HttpPost]
         public IActionResult AdicionarFilme([FromBody] Filme filme)
         {
-            //Faz com que os filmes não tenham o mesmo Id
-            filme.Id = id++;
-
-            filmes.Add(filme);
-
+            _context.Filmes.Add(filme);
+            _context.SaveChanges();
             //O primeiro parâmetro é a lógica de recuperar que deve ser usada, o segundo é a propriedade que deve ser herdada e o terceiro o objeto que está se referindo
             return CreatedAtAction(nameof(RecuperaFilmesPorId), new {id = filme.Id}, filme);
         }
@@ -32,7 +35,7 @@ namespace APIFilmes.Controllers
         [HttpGet]
         public IActionResult RecuperaFilmes()
         {
-            return Ok(filmes);
+            return Ok(_context.Filmes);
         }
         /*
          * Isto v é a mesma coisa do que isso ^
@@ -59,7 +62,7 @@ namespace APIFilmes.Controllers
             */
 
             //Isto v é o mesmo que isso ^
-            Filme filme = filmes.FirstOrDefault(filme => filme.Id == id);
+            Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
 
             if (filme != null)
             {
