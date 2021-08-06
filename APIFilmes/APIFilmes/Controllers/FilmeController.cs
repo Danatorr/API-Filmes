@@ -24,6 +24,7 @@ namespace APIFilmes.Controllers
         [HttpPost]
         public IActionResult AdicionarFilme([FromBody] Filme filme)
         {
+            //Adicionando e salvando um objeto
             _context.Filmes.Add(filme);
             _context.SaveChanges();
             //O primeiro parâmetro é a lógica de recuperar que deve ser usada, o segundo é a propriedade que deve ser herdada e o terceiro o objeto que está se referindo
@@ -68,6 +69,37 @@ namespace APIFilmes.Controllers
             {
                 return Ok(filme);
             }
+            return NotFound($"O filme com o id {id} não pode ser achado!");
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult AtualizaFilme(int id, [FromBody] Filme filmenovo)
+        {
+            Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
+            if (filme != null)
+            {
+                filme.Titulo = filmenovo.Titulo;
+                filme.Diretor = filmenovo.Diretor;
+                filme.Duracao = filmenovo.Duracao;
+                filme.Genero = filmenovo.Genero;
+                _context.SaveChanges();
+                return NoContent();
+            }
+
+            return NotFound($"O filme com o id {id} não pode ser achado!");
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletaFilme(int id)
+        {
+            Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
+            if (filme != null)
+            {
+                _context.Remove(filme);
+                _context.SaveChanges();
+                return NoContent();
+            }
+
             return NotFound($"O filme com o id {id} não pode ser achado!");
         }
     }
