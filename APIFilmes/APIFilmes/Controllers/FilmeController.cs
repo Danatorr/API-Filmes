@@ -1,4 +1,5 @@
 ﻿using APIFilmes.Data;
+using APIFilmes.Data.Dtos;
 using APIFilmes.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,8 +23,16 @@ namespace APIFilmes.Controllers
 
         //O verbo "Post" sobe para o banco de dados
         [HttpPost]
-        public IActionResult AdicionarFilme([FromBody] Filme filme)
+        public IActionResult AdicionarFilme([FromBody] CreateFilmeDto filmeDto)
         {
+            Filme filme = new Filme
+            {
+                Titulo = filmeDto.Titulo,
+                Genero = filmeDto.Genero,
+                Diretor = filmeDto.Diretor,
+                Duracao = filmeDto.Duracao
+            };
+
             //Adicionando e salvando um objeto
             _context.Filmes.Add(filme);
             _context.SaveChanges();
