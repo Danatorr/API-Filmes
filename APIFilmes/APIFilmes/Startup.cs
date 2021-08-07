@@ -35,6 +35,7 @@ namespace APIFilmes
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "APIFilmes", Version = "v1" });
             });
             services.AddDbContext<FilmeContext>(options => options.UseMySQL(Configuration.GetConnectionString("FilmeConnection")));
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
