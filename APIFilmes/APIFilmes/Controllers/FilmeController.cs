@@ -76,21 +76,30 @@ namespace APIFilmes.Controllers
 
             if (filme != null)
             {
-                return Ok(filme);
+                ReadFilmeDto filmeDto = new ReadFilmeDto
+                {
+                    Titulo = filme.Titulo,
+                    Genero = filme.Genero,
+                    Diretor = filme.Diretor,
+                    Duracao = filme.Duracao,
+                    Id = filme.Id,
+                    HoraDaConsulta = DateTime.Now
+                };
+                return Ok(filmeDto);
             }
             return NotFound($"O filme com o id {id} não pode ser achado!");
         }
 
         [HttpPut("{id}")]
-        public IActionResult AtualizaFilme(int id, [FromBody] Filme filmenovo)
+        public IActionResult AtualizaFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
         {
             Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
             if (filme != null)
             {
-                filme.Titulo = filmenovo.Titulo;
-                filme.Diretor = filmenovo.Diretor;
-                filme.Duracao = filmenovo.Duracao;
-                filme.Genero = filmenovo.Genero;
+                filme.Titulo = filmeDto.Titulo;
+                filme.Diretor = filmeDto.Diretor;
+                filme.Duracao = filmeDto.Duracao;
+                filme.Genero = filmeDto.Genero;
                 _context.SaveChanges();
                 return NoContent();
             }
